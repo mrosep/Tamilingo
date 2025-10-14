@@ -1,0 +1,18 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Local development
+.claude/
+.mcp_handley_lab/
+
+# Dependencies (if you add npm/node later)
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*

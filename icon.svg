@@ -1,0 +1,13 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Full-bleed square background - NO rounded corners! OS will apply squircle mask -->
+  <rect width="512" height="512" fill="#a8d5aa"/>
+  
+  <!-- Tamil letter அ with embedded font styling and fallbacks -->
+  <text x="256" y="350" 
+        font-family="Noto Sans Tamil, Tamil Sangam MN, InaiMathi, serif" 
+        font-size="280" 
+        font-weight="bold"
+        fill="#4a7c59" 
+        text-anchor="middle" 
+        dominant-baseline="middle">அ</text>
+</svg>

@@ -1,0 +1,188 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    line-height: 1.6;
+    color: #2d5016;
+    background: #a8d5aa;
+    background-image: url('srilanka.png');
+    background-size: 400px auto;
+    background-position: right 90%;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+header h1 {
+    color: white;
+    font-size: 3.5rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    margin-top: 0.5rem;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    background: #4a7c59;
+    padding: 1.2rem 2rem;
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+main {
+    background: rgba(168, 213, 170, 0.9);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(45, 80, 22, 0.2);
+    display: inline-block;
+    width: 100%;
+}
+
+#tile-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    justify-items: center;
+}
+
+.word-tile {
+    background: #4a7c59;
+    color: white;
+    padding: 1.5rem 0.8rem;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 2rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(74, 124, 89, 0.4);
+    transition: all 0.3s ease;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 250px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.word-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(74, 124, 89, 0.6);
+    background: #5a9b69;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.word-tile:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(74, 124, 89, 0.5);
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+        background-size: 300px auto;
+    }
+    
+    .container {
+        padding: 0;
+    }
+    
+    header h1 {
+        font-size: 2.8rem;
+        margin-bottom: 1.5rem;
+        margin-top: 0.5rem;
+        padding: 1rem 1.5rem;
+    }
+    
+    main {
+        padding: 1.2rem;
+        border-radius: 15px;
+    }
+    
+    #tile-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .word-tile {
+        padding: 1.6rem 0.4rem;
+        font-size: 2.4rem;
+        min-height: 95px;
+        max-width: none;
+    }
+}
+
+/* Extra narrow phones */
+@media (max-width: 360px) {
+    body {
+        padding: 8px;
+        background-size: 260px auto;
+        background-position: right 85%;
+    }
+    
+    header h1 {
+        font-size: 2rem;
+        margin-top: 0.2rem;
+        margin-bottom: 1rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    main {
+        padding: 0.8rem;
+    }
+    
+    #tile-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .word-tile {
+        padding: 1.2rem 0.3rem;
+        font-size: 1.7rem;
+        min-height: 75px;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+        background-size: 320px auto;
+        background-position: right 85%;
+    }
+    
+    header h1 {
+        font-size: 2.4rem;
+        margin-top: 0.3rem;
+        margin-bottom: 1.2rem;
+        padding: 0.8rem 1rem;
+    }
+    
+    main {
+        padding: 1rem;
+    }
+    
+    #tile-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .word-tile {
+        padding: 1.4rem 0.4rem;
+        font-size: 2rem;
+        min-height: 85px;
+        max-width: none;
+    }
+}

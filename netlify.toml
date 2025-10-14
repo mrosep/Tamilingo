@@ -1,0 +1,35 @@
+# Netlify configuration for Tamilingo
+
+[build]
+  # No build command needed for static site
+  publish = "."
+
+# Production context settings
+[context.production]
+  # Specify index.html as the default document
+  [context.production.processing]
+    skip_processing = false
+
+# Deploy Preview context
+[context.deploy-preview]
+  publish = "."
+
+# Branch deploy context
+[context.branch-deploy]
+  publish = "."
+
+# Redirect rules (if needed in the future)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  conditions = {Role = ["admin"]}
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
