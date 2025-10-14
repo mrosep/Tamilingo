@@ -1,0 +1,24 @@
+{
+  "name": "tamilingo",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrosep/Tamilingo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrosep/Tamilingo/issues"
+  },
+  "homepage": "https://github.com/mrosep/Tamilingo#readme",
+  "description": "",
+  "dependencies": {
+    "cloudinary": "^2.7.0",
+    "dotenv": "^17.2.3"
+  }
+}

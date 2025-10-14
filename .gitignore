@@ -10,8 +10,11 @@ Thumbs.db
 .claude/
 .mcp_handley_lab/
 
-# Dependencies (if you add npm/node later)
+# Dependencies
 node_modules/
+
+# Environment variables (contains API secrets)
+.env
 
 # Logs
 *.log

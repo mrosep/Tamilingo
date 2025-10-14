@@ -33,6 +33,8 @@ const wordList = [
   { english: "when", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/when_mnea3c.mp4"},						
   { english: "how", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/how_vocnmg.mp4"},						
   { english: "I", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/I_ecmvtf.mp4"},						
+  { english: "you informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820466/you_informal_w6yi6z.mp4" },
+  { english: "he or she formal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820466/he_or_she_formal_xjdpna.mp4" },
 ];
 
 /**
