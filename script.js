@@ -39,36 +39,82 @@ const wordList = [
 ];
 
 /**
- * Creates and renders all word tiles from the wordList array
+ * Creates and renders word tiles from the wordList array
+ * @param {Array} wordsToDisplay - Optional array of words to display. If not provided, shows all words.
  */
-function createWordTiles() {
+function createWordTiles(wordsToDisplay = wordList) {
     // Get the container element where tiles will be added
     const tileContainer = document.getElementById('tile-container');
-    
+
     // Clear any existing content
     tileContainer.innerHTML = '';
-    
-    // Loop through each word in the wordList array
-    wordList.forEach((word, index) => {
+
+    // If no words match the filter, show a message
+    if (wordsToDisplay.length === 0) {
+        tileContainer.innerHTML = `
+            <div style="grid-column: 1 / -1; padding: 2rem; color: #2d5016; font-size: 1.2rem;">
+                No words found. Try a different search term.
+            </div>
+        `;
+        return;
+    }
+
+    // Loop through each word in the array
+    wordsToDisplay.forEach((word, index) => {
         // Create a new div element for the tile
         const tileDiv = document.createElement('div');
-        
+
         // Add the CSS class for styling
         tileDiv.className = 'word-tile';
-        
+
         // Set the text content to the English word
         tileDiv.textContent = word.english;
-        
+
         // Add click event listener to play audio
         tileDiv.addEventListener('click', () => {
             playWordAudio(word.audioUrl, word.english);
         });
-        
+
         // Append the tile to the container
         tileContainer.appendChild(tileDiv);
     });
-    
-    console.log(`Created ${wordList.length} word tiles`);
+
+    console.log(`Created ${wordsToDisplay.length} word tiles`);
+}
+
+/**
+ * Filters the word list based on search input
+ * @param {string} searchTerm - The search term to filter by
+ * @returns {Array} - Filtered array of words
+ */
+function filterWords(searchTerm) {
+    // If search term is empty, return all words
+    if (!searchTerm || searchTerm.trim() === '') {
+        return wordList;
+    }
+
+    // Convert search term to lowercase for case-insensitive matching
+    const lowerSearchTerm = searchTerm.toLowerCase();
+
+    // Filter words that contain the search term
+    return wordList.filter(word => {
+        const lowerWord = word.english.toLowerCase();
+        return lowerWord.includes(lowerSearchTerm);
+    });
+}
+
+/**
+ * Handles search input changes
+ */
+function handleSearch() {
+    const searchInput = document.getElementById('search-input');
+    const searchTerm = searchInput.value;
+
+    // Filter the words based on search term
+    const filteredWords = filterWords(searchTerm);
+
+    // Re-render tiles with filtered words
+    createWordTiles(filteredWords);
 }
 
 /**
@@ -95,7 +141,21 @@ function playWordAudio(audioUrl, wordText) {
 function initializeApp() {
     // Create and display all word tiles
     createWordTiles();
-    
+
+    // Set up search functionality
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        // Listen for input changes (fires as user types)
+        searchInput.addEventListener('input', handleSearch);
+
+        // Also listen for Enter key
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                handleSearch();
+            }
+        });
+    }
+
     console.log('Tamilingo app initialized');
 }
 
