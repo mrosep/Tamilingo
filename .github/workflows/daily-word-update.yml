@@ -11,6 +11,10 @@ jobs:
   add-new-word:
     runs-on: ubuntu-latest
 
+    # Grant write permissions to push changes
+    permissions:
+      contents: write
+
     steps:
       # 1. Check out the repository
       - name: Checkout repository
