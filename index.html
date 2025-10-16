@@ -13,21 +13,46 @@
             <h1>Tamilingo</h1>
         </header>
 
-        <div class="search-container">
-            <input
-                type="text"
-                id="search-input"
-                placeholder="Search for words..."
-                autocomplete="off"
-            >
-            <span class="search-icon">🔍</span>
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <div class="home-tiles-container">
+                <div class="home-tile" data-page="word-list">
+                    <span>Word List</span>
+                </div>
+                <div class="home-tile" data-page="revise">
+                    <span>Revise</span>
+                </div>
+            </div>
         </div>
 
-        <main>
-            <div id="tile-container"></div>
-        </main>
+        <!-- Word List Page -->
+        <div id="word-list-page" class="page">
+            <button class="back-button" data-page="home">← Back</button>
+
+            <div class="search-container">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search for words..."
+                    autocomplete="off"
+                >
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <main>
+                <div id="tile-container"></div>
+            </main>
+        </div>
+
+        <!-- Revise Page -->
+        <div id="revise-page" class="page">
+            <button class="back-button" data-page="home">← Back</button>
+            <main>
+                <div class="coming-soon">Coming soon...</div>
+            </main>
+        </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>

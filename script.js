@@ -40,6 +40,57 @@ const wordList = [
 ];
 
 /**
+ * Navigates to a specific page by hiding all pages and showing the target page
+ * @param {string} pageName - The name of the page to navigate to (home, word-list, revise)
+ */
+function navigateTo(pageName) {
+    // Hide all pages
+    const allPages = document.querySelectorAll('.page');
+    allPages.forEach(page => {
+        page.classList.remove('active');
+    });
+
+    // Show the target page
+    const targetPage = document.getElementById(`${pageName}-page`);
+    if (targetPage) {
+        targetPage.classList.add('active');
+        console.log(`Navigated to: ${pageName}`);
+
+        // If navigating to word-list page, create word tiles
+        if (pageName === 'word-list') {
+            createWordTiles();
+        }
+    } else {
+        console.error(`Page not found: ${pageName}`);
+    }
+}
+
+/**
+ * Sets up navigation event listeners for home tiles and back buttons
+ */
+function setupNavigation() {
+    // Home tile click handlers
+    const homeTiles = document.querySelectorAll('.home-tile');
+    homeTiles.forEach(tile => {
+        tile.addEventListener('click', () => {
+            const targetPage = tile.getAttribute('data-page');
+            navigateTo(targetPage);
+        });
+    });
+
+    // Back button click handlers
+    const backButtons = document.querySelectorAll('.back-button');
+    backButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const targetPage = button.getAttribute('data-page');
+            navigateTo(targetPage);
+        });
+    });
+
+    console.log('Navigation set up complete');
+}
+
+/**
  * Creates and renders word tiles from the wordList array
  * @param {Array} wordsToDisplay - Optional array of words to display. If not provided, shows all words.
  */
@@ -140,8 +191,8 @@ function playWordAudio(audioUrl, wordText) {
  * Initializes the Tamilingo app when the page loads
  */
 function initializeApp() {
-    // Create and display all word tiles
-    createWordTiles();
+    // Set up navigation between pages
+    setupNavigation();
 
     // Set up search functionality
     const searchInput = document.getElementById('search-input');
