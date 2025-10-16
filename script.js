@@ -133,12 +133,56 @@ function setupRevisePage() {
     const nextButton = document.getElementById('next-word-btn');
 
     if (reviseTile) {
-        // Click on tile to play audio
-        reviseTile.addEventListener('click', () => {
-            const audioUrl = reviseTile.dataset.audioUrl;
-            const wordText = reviseTile.textContent;
-            if (audioUrl) {
-                playWordAudio(audioUrl, wordText);
+        let touchStartY = 0;
+        let touchEndY = 0;
+        let isSwiping = false;
+
+        // Track touch start position
+        reviseTile.addEventListener('touchstart', (e) => {
+            touchStartY = e.touches[0].clientY;
+            isSwiping = false;
+        });
+
+        // Track touch move to detect if user is swiping
+        reviseTile.addEventListener('touchmove', (e) => {
+            const touchCurrentY = e.touches[0].clientY;
+            const distance = touchStartY - touchCurrentY;
+
+            // If moved more than 10px, consider it a swipe
+            if (Math.abs(distance) > 10) {
+                isSwiping = true;
+            }
+        });
+
+        // Handle touch end - detect upward swipe
+        reviseTile.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].clientY;
+            const swipeDistance = touchStartY - touchEndY;
+
+            // Check if it's an upward swipe (positive distance) and sufficient distance (at least 50px)
+            if (isSwiping && swipeDistance > 50) {
+                // Upward swipe detected - show new word
+                showRandomWord();
+                console.log('Upward swipe detected - showing new word');
+            } else if (!isSwiping) {
+                // If not swiping, treat as a tap to play audio
+                const audioUrl = reviseTile.dataset.audioUrl;
+                const wordText = reviseTile.textContent;
+                if (audioUrl) {
+                    playWordAudio(audioUrl, wordText);
+                }
+            }
+        });
+
+        // Keep click event for desktop/mouse users
+        reviseTile.addEventListener('click', (e) => {
+            // Only trigger if not from a touch device
+            if (e.pointerType !== 'touch') {
+                const audioUrl = reviseTile.dataset.audioUrl;
+                const wordText = reviseTile.textContent;
+                if (audioUrl) {
+                    playWordAudio(audioUrl, wordText);
+                }
             }
         });
     }
