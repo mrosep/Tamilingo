@@ -130,7 +130,6 @@ function showRandomWord() {
  */
 function setupRevisePage() {
     const reviseTile = document.getElementById('revise-tile');
-    const nextButton = document.getElementById('next-word-btn');
 
     if (reviseTile) {
         let touchStartY = 0;
@@ -184,13 +183,6 @@ function setupRevisePage() {
                     playWordAudio(audioUrl, wordText);
                 }
             }
-        });
-    }
-
-    if (nextButton) {
-        // Click next button to show a new random word
-        nextButton.addEventListener('click', () => {
-            showRandomWord();
         });
     }
 

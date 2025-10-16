@@ -110,42 +110,12 @@ header h1 {
 }
 
 /* Revise page styles */
-.revise-controls {
-    text-align: center;
-    padding: 1rem 0;
-}
-
-.next-button {
-    background: #4a7c59;
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    padding: 0.9rem 2.5rem;
-    border-radius: 12px;
-    font-size: 1.3rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.next-button:hover {
-    background: #5a9b69;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(74, 124, 89, 0.5);
-}
-
-.next-button:active {
-    transform: translateY(0);
-}
-
 .revise-container {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 200px);
+    height: calc(100vh - 180px);
     padding: 0 1rem;
-    margin-top: -30px;
 }
 
 .revise-tile {
@@ -306,14 +276,8 @@ main {
         padding: 0.7rem 1.2rem;
     }
 
-    .next-button {
-        font-size: 1.2rem;
-        padding: 0.8rem 2rem;
-    }
-
     .revise-container {
-        height: calc(100vh - 180px);
-        margin-top: -20px;
+        height: calc(100vh - 150px);
     }
 
     .revise-tile {
@@ -381,14 +345,8 @@ main {
         padding: 0.6rem 1rem;
     }
 
-    .next-button {
-        font-size: 1rem;
-        padding: 0.7rem 1.6rem;
-    }
-
     .revise-container {
-        height: calc(100vh - 160px);
-        margin-top: -15px;
+        height: calc(100vh - 120px);
     }
 
     .revise-tile {
@@ -454,14 +412,8 @@ main {
         padding: 0.65rem 1.1rem;
     }
 
-    .next-button {
-        font-size: 1.1rem;
-        padding: 0.75rem 1.8rem;
-    }
-
     .revise-container {
-        height: calc(100vh - 170px);
-        margin-top: -18px;
+        height: calc(100vh - 135px);
     }
 
     .revise-tile {
