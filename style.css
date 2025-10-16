@@ -113,12 +113,75 @@ header h1 {
     transform: translateX(-1px);
 }
 
-/* Coming soon message */
-.coming-soon {
-    color: #2d5016;
-    font-size: 2rem;
+/* Revise page styles */
+.revise-controls {
     text-align: center;
-    padding: 3rem 2rem;
+    padding: 1rem 0;
+}
+
+.next-button {
+    background: #4a7c59;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    padding: 0.9rem 2.5rem;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.next-button:hover {
+    background: #5a9b69;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(74, 124, 89, 0.5);
+}
+
+.next-button:active {
+    transform: translateY(0);
+}
+
+.revise-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 250px);
+    padding: 0 1rem;
+}
+
+.revise-tile {
+    background: #4a7c59;
+    color: white;
+    width: 95%;
+    max-width: 700px;
+    height: 35vh;
+    min-height: 200px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 3.5rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(74, 124, 89, 0.6);
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.revise-tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(74, 124, 89, 0.8);
+    background: #5a9b69;
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.revise-tile:active {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(74, 124, 89, 0.7);
 }
 
 /* Search bar container */
@@ -246,9 +309,18 @@ main {
         padding: 0.7rem 1.2rem;
     }
 
-    .coming-soon {
-        font-size: 1.8rem;
-        padding: 2.5rem 1.5rem;
+    .next-button {
+        font-size: 1.2rem;
+        padding: 0.8rem 2rem;
+    }
+
+    .revise-container {
+        height: calc(100vh - 220px);
+    }
+
+    .revise-tile {
+        font-size: 3rem;
+        height: 32vh;
     }
 
     .search-container {
@@ -311,9 +383,18 @@ main {
         padding: 0.6rem 1rem;
     }
 
-    .coming-soon {
-        font-size: 1.4rem;
-        padding: 2rem 1rem;
+    .next-button {
+        font-size: 1rem;
+        padding: 0.7rem 1.6rem;
+    }
+
+    .revise-container {
+        height: calc(100vh - 190px);
+    }
+
+    .revise-tile {
+        font-size: 2.2rem;
+        height: 30vh;
     }
 
     .search-container {
@@ -374,9 +455,18 @@ main {
         padding: 0.65rem 1.1rem;
     }
 
-    .coming-soon {
-        font-size: 1.6rem;
-        padding: 2.2rem 1.2rem;
+    .next-button {
+        font-size: 1.1rem;
+        padding: 0.75rem 1.8rem;
+    }
+
+    .revise-container {
+        height: calc(100vh - 205px);
+    }
+
+    .revise-tile {
+        font-size: 2.6rem;
+        height: 31vh;
     }
 
     .search-container {

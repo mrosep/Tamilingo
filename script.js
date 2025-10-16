@@ -72,6 +72,11 @@ function navigateTo(pageName, updateHistory = true) {
         if (pageName === 'word-list') {
             createWordTiles();
         }
+
+        // If navigating to revise page, show a random word
+        if (pageName === 'revise') {
+            showRandomWord();
+        }
     } else {
         console.error(`Page not found: ${pageName}`);
     }
@@ -91,6 +96,61 @@ function setupNavigation() {
     });
 
     console.log('Navigation set up complete');
+}
+
+/**
+ * Gets a random word from the word list
+ * @returns {Object} - A random word object with english and audioUrl properties
+ */
+function getRandomWord() {
+    const randomIndex = Math.floor(Math.random() * wordList.length);
+    return wordList[randomIndex];
+}
+
+/**
+ * Displays a random word on the revise tile
+ */
+function showRandomWord() {
+    const reviseTile = document.getElementById('revise-tile');
+    if (!reviseTile) return;
+
+    const randomWord = getRandomWord();
+
+    // Clear previous content and add new word
+    reviseTile.textContent = randomWord.english;
+
+    // Store the audio URL in a data attribute for easy access
+    reviseTile.dataset.audioUrl = randomWord.audioUrl;
+
+    console.log(`Showing random word: ${randomWord.english}`);
+}
+
+/**
+ * Sets up the revise page functionality
+ */
+function setupRevisePage() {
+    const reviseTile = document.getElementById('revise-tile');
+    const nextButton = document.getElementById('next-word-btn');
+
+    if (reviseTile) {
+        // Click on tile to play audio
+        reviseTile.addEventListener('click', () => {
+            const audioUrl = reviseTile.dataset.audioUrl;
+            const wordText = reviseTile.textContent;
+            if (audioUrl) {
+                playWordAudio(audioUrl, wordText);
+            }
+        });
+    }
+
+    if (nextButton) {
+        // Click next button to show a new random word
+        nextButton.addEventListener('click', () => {
+            showRandomWord();
+        });
+    }
+
+    console.log('Revise page set up complete');
 }
 
 /**
@@ -196,6 +256,9 @@ function playWordAudio(audioUrl, wordText) {
 function initializeApp() {
     // Set up navigation between pages
     setupNavigation();
+
+    // Set up revise page functionality
+    setupRevisePage();
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
