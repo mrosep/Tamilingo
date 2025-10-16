@@ -56,7 +56,7 @@ header h1 {
 .home-tile {
     background: #4a7c59;
     color: white;
-    height: 180px;
+    height: 210px;
     border-radius: 20px;
     cursor: pointer;
     font-size: 3.5rem;
@@ -298,7 +298,7 @@ main {
 
     .home-tile {
         font-size: 3rem;
-        height: 160px;
+        height: 185px;
     }
 
     .back-button {
@@ -373,7 +373,7 @@ main {
 
     .home-tile {
         font-size: 2.2rem;
-        height: 140px;
+        height: 165px;
     }
 
     .back-button {
@@ -446,7 +446,7 @@ main {
 
     .home-tile {
         font-size: 2.6rem;
-        height: 150px;
+        height: 175px;
     }
 
     .back-button {
