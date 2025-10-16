@@ -78,7 +78,7 @@ function navigateTo(pageName, updateHistory = true) {
 }
 
 /**
- * Sets up navigation event listeners for home tiles and back buttons
+ * Sets up navigation event listeners for home tiles
  */
 function setupNavigation() {
     // Home tile click handlers
@@ -86,15 +86,6 @@ function setupNavigation() {
     homeTiles.forEach(tile => {
         tile.addEventListener('click', () => {
             const targetPage = tile.getAttribute('data-page');
-            navigateTo(targetPage);
-        });
-    });
-
-    // Back button click handlers
-    const backButtons = document.querySelectorAll('.back-button');
-    backButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetPage = button.getAttribute('data-page');
             navigateTo(targetPage);
         });
     });
