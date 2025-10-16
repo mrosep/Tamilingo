@@ -42,8 +42,9 @@ const wordList = [
 /**
  * Navigates to a specific page by hiding all pages and showing the target page
  * @param {string} pageName - The name of the page to navigate to (home, word-list, revise)
+ * @param {boolean} updateHistory - Whether to update browser history (default: true)
  */
-function navigateTo(pageName) {
+function navigateTo(pageName, updateHistory = true) {
     // Hide all pages
     const allPages = document.querySelectorAll('.page');
     allPages.forEach(page => {
@@ -55,6 +56,17 @@ function navigateTo(pageName) {
     if (targetPage) {
         targetPage.classList.add('active');
         console.log(`Navigated to: ${pageName}`);
+
+        // Update browser history if requested
+        if (updateHistory) {
+            if (pageName === 'home') {
+                // When going back to home, replace the current history state
+                history.replaceState({ page: pageName }, '', '#' + pageName);
+            } else {
+                // When going to other pages, push a new history state
+                history.pushState({ page: pageName }, '', '#' + pageName);
+            }
+        }
 
         // If navigating to word-list page, create word tiles
         if (pageName === 'word-list') {
@@ -193,6 +205,20 @@ function playWordAudio(audioUrl, wordText) {
 function initializeApp() {
     // Set up navigation between pages
     setupNavigation();
+
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.page) {
+            // Navigate to the page stored in history state without updating history
+            navigateTo(event.state.page, false);
+        } else {
+            // If no state, go back to home
+            navigateTo('home', false);
+        }
+    });
+
+    // Set initial history state for home page
+    history.replaceState({ page: 'home' }, '', '#home');
 
     // Set up search functionality
     const searchInput = document.getElementById('search-input');
