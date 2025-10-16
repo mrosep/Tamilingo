@@ -151,6 +151,37 @@ header h1 {
     box-shadow: 0 6px 20px rgba(74, 124, 89, 0.7);
 }
 
+/* Swipe animations */
+@keyframes swipeUp {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-150vh);
+        opacity: 0;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(150vh);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.revise-tile.swiping-up {
+    animation: swipeUp 0.5s ease-in-out forwards;
+}
+
+.revise-tile.sliding-in {
+    animation: slideIn 0.5s ease-in-out forwards;
+}
+
 /* Search bar container */
 .search-container {
     position: relative;

@@ -126,6 +126,38 @@ function showRandomWord() {
 }
 
 /**
+ * Shows a new random word with swipe animation
+ */
+function showRandomWordWithAnimation() {
+    const reviseTile = document.getElementById('revise-tile');
+    if (!reviseTile) return;
+
+    // Add swiping-up animation class
+    reviseTile.classList.add('swiping-up');
+
+    // Wait for swipe-up animation to complete (500ms)
+    setTimeout(() => {
+        // Get new random word
+        const randomWord = getRandomWord();
+
+        // Update content
+        reviseTile.textContent = randomWord.english;
+        reviseTile.dataset.audioUrl = randomWord.audioUrl;
+
+        // Remove swiping-up and add sliding-in animation
+        reviseTile.classList.remove('swiping-up');
+        reviseTile.classList.add('sliding-in');
+
+        // Remove sliding-in class after animation completes
+        setTimeout(() => {
+            reviseTile.classList.remove('sliding-in');
+        }, 500);
+
+        console.log(`Showing new word with animation: ${randomWord.english}`);
+    }, 500);
+}
+
+/**
  * Sets up the revise page functionality
  */
 function setupRevisePage() {
@@ -160,9 +192,9 @@ function setupRevisePage() {
 
             // Check if it's an upward swipe (positive distance) and sufficient distance (at least 50px)
             if (isSwiping && swipeDistance > 50) {
-                // Upward swipe detected - show new word
-                showRandomWord();
-                console.log('Upward swipe detected - showing new word');
+                // Upward swipe detected - show new word with animation
+                showRandomWordWithAnimation();
+                console.log('Upward swipe detected - showing new word with animation');
             } else if (!isSwiping) {
                 // If not swiping, treat as a tap to play audio
                 const audioUrl = reviseTile.dataset.audioUrl;
