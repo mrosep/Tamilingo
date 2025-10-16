@@ -110,15 +110,26 @@ header h1 {
 }
 
 /* Revise page styles */
+.swipe-instruction {
+    color: #2d5016;
+    font-size: 1.2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
 .revise-container {
+    position: relative;
+    height: calc(100vh - 220px);
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - 180px);
     padding: 0 1rem;
 }
 
 .revise-tile {
+    position: absolute;
     background: #4a7c59;
     color: white;
     width: 95%;
@@ -131,55 +142,31 @@ header h1 {
     font-weight: 500;
     text-align: center;
     box-shadow: 0 8px 25px rgba(74, 124, 89, 0.6);
-    transition: all 0.3s ease;
     border: 2px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
+    touch-action: none;
 }
 
-.revise-tile:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 35px rgba(74, 124, 89, 0.8);
-    background: #5a9b69;
-    border-color: rgba(255, 255, 255, 0.4);
+.revise-tile-next {
+    z-index: 1;
+    opacity: 0.8;
+    transform: scale(0.95);
 }
 
-.revise-tile:active {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 124, 89, 0.7);
+.revise-tile-current {
+    z-index: 2;
 }
 
-/* Swipe animations */
-@keyframes swipeUp {
-    0% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(-150vh);
-        opacity: 0;
-    }
+.revise-tile.swiping {
+    transition: none;
 }
 
-@keyframes slideIn {
-    0% {
-        transform: translateY(150vh);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-.revise-tile.swiping-up {
-    animation: swipeUp 0.5s ease-in-out forwards;
-}
-
-.revise-tile.sliding-in {
-    animation: slideIn 0.5s ease-in-out forwards;
+.revise-tile.returning {
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
 }
 
 /* Search bar container */
@@ -307,8 +294,12 @@ main {
         padding: 0.7rem 1.2rem;
     }
 
+    .swipe-instruction {
+        font-size: 1.1rem;
+    }
+
     .revise-container {
-        height: calc(100vh - 150px);
+        height: calc(100vh - 190px);
     }
 
     .revise-tile {
@@ -376,8 +367,12 @@ main {
         padding: 0.6rem 1rem;
     }
 
+    .swipe-instruction {
+        font-size: 1rem;
+    }
+
     .revise-container {
-        height: calc(100vh - 120px);
+        height: calc(100vh - 160px);
     }
 
     .revise-tile {
@@ -443,8 +438,12 @@ main {
         padding: 0.65rem 1.1rem;
     }
 
+    .swipe-instruction {
+        font-size: 1.05rem;
+    }
+
     .revise-container {
-        height: calc(100vh - 135px);
+        height: calc(100vh - 175px);
     }
 
     .revise-tile {

@@ -112,111 +112,155 @@ function getRandomWord() {
  */
 function showRandomWord() {
     const reviseTile = document.getElementById('revise-tile');
+    const reviseTileNext = document.getElementById('revise-tile-next');
+
     if (!reviseTile) return;
 
     const randomWord = getRandomWord();
 
-    // Clear previous content and add new word
+    // Clear previous content and add new word to current tile
     reviseTile.textContent = randomWord.english;
-
-    // Store the audio URL in a data attribute for easy access
     reviseTile.dataset.audioUrl = randomWord.audioUrl;
+
+    // Also prepare next card
+    if (reviseTileNext) {
+        const nextWord = getRandomWord();
+        reviseTileNext.textContent = nextWord.english;
+        reviseTileNext.dataset.audioUrl = nextWord.audioUrl;
+    }
 
     console.log(`Showing random word: ${randomWord.english}`);
 }
 
 /**
- * Shows a new random word with swipe animation
- */
-function showRandomWordWithAnimation() {
-    const reviseTile = document.getElementById('revise-tile');
-    if (!reviseTile) return;
-
-    // Add swiping-up animation class
-    reviseTile.classList.add('swiping-up');
-
-    // Wait for swipe-up animation to complete (500ms)
-    setTimeout(() => {
-        // Get new random word
-        const randomWord = getRandomWord();
-
-        // Update content
-        reviseTile.textContent = randomWord.english;
-        reviseTile.dataset.audioUrl = randomWord.audioUrl;
-
-        // Remove swiping-up and add sliding-in animation
-        reviseTile.classList.remove('swiping-up');
-        reviseTile.classList.add('sliding-in');
-
-        // Remove sliding-in class after animation completes
-        setTimeout(() => {
-            reviseTile.classList.remove('sliding-in');
-        }, 500);
-
-        console.log(`Showing new word with animation: ${randomWord.english}`);
-    }, 500);
-}
-
-/**
- * Sets up the revise page functionality
+ * Sets up the revise page functionality with interactive swipe
  */
 function setupRevisePage() {
     const reviseTile = document.getElementById('revise-tile');
+    const reviseTileNext = document.getElementById('revise-tile-next');
 
-    if (reviseTile) {
-        let touchStartY = 0;
-        let touchEndY = 0;
-        let isSwiping = false;
+    if (!reviseTile) return;
 
-        // Track touch start position
-        reviseTile.addEventListener('touchstart', (e) => {
-            touchStartY = e.touches[0].clientY;
-            isSwiping = false;
-        });
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+    let isSwiping = false;
+    const swipeThreshold = 100; // Pixels to swipe before auto-complete
 
-        // Track touch move to detect if user is swiping
-        reviseTile.addEventListener('touchmove', (e) => {
-            const touchCurrentY = e.touches[0].clientY;
-            const distance = touchStartY - touchCurrentY;
+    // Track touch start position
+    reviseTile.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+        isSwiping = false;
 
-            // If moved more than 10px, consider it a swipe
-            if (Math.abs(distance) > 10) {
-                isSwiping = true;
+        // Disable transitions for smooth real-time movement
+        reviseTile.classList.add('swiping');
+    });
+
+    // Track touch move - make card follow finger
+    reviseTile.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // Prevent scrolling while swiping
+
+        const touchCurrentY = e.touches[0].clientY;
+        const touchCurrentX = e.touches[0].clientX;
+
+        const deltaY = touchStartY - touchCurrentY; // Positive = swipe up
+        const deltaX = touchCurrentX - touchStartX; // For slight horizontal arc
+
+        // If moved more than 10px, consider it a swipe
+        if (Math.abs(deltaY) > 10) {
+            isSwiping = true;
+        }
+
+        // Only move card if swiping upward
+        if (deltaY > 0) {
+            // Calculate rotation for arc effect (max 15 degrees)
+            const rotation = (deltaX / window.innerWidth) * 15;
+
+            // Calculate opacity (fade as it moves up)
+            const opacity = Math.max(0, 1 - (deltaY / 300));
+
+            // Apply transform: move and rotate
+            reviseTile.style.transform = `translateY(-${deltaY}px) translateX(${deltaX * 0.3}px) rotate(${rotation}deg)`;
+            reviseTile.style.opacity = opacity;
+        }
+    });
+
+    // Handle touch end
+    reviseTile.addEventListener('touchend', (e) => {
+        const touchEndY = e.changedTouches[0].clientY;
+        const swipeDistance = touchStartY - touchEndY;
+        const swipeTime = Date.now() - touchStartTime;
+        const swipeVelocity = swipeDistance / swipeTime;
+
+        // Check if it's a quick tap (less than 200ms and small distance)
+        if (!isSwiping && swipeTime < 200 && Math.abs(swipeDistance) < 10) {
+            // Tap detected - play audio
+            const audioUrl = reviseTile.dataset.audioUrl;
+            const wordText = reviseTile.textContent;
+            if (audioUrl) {
+                playWordAudio(audioUrl, wordText);
             }
-        });
+            reviseTile.classList.remove('swiping');
+            reviseTile.style.transform = '';
+            reviseTile.style.opacity = '';
+            return;
+        }
 
-        // Handle touch end - detect upward swipe
-        reviseTile.addEventListener('touchend', (e) => {
-            touchEndY = e.changedTouches[0].clientY;
-            const swipeDistance = touchStartY - touchEndY;
+        // Check if swipe passed threshold or has high velocity
+        if ((isSwiping && swipeDistance > swipeThreshold) || swipeVelocity > 0.5) {
+            // Complete the swipe - animate card off screen
+            reviseTile.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+            reviseTile.style.transform = 'translateY(-150vh) rotate(20deg)';
+            reviseTile.style.opacity = '0';
 
-            // Check if it's an upward swipe (positive distance) and sufficient distance (at least 50px)
-            if (isSwiping && swipeDistance > 50) {
-                // Upward swipe detected - show new word with animation
-                showRandomWordWithAnimation();
-                console.log('Upward swipe detected - showing new word with animation');
-            } else if (!isSwiping) {
-                // If not swiping, treat as a tap to play audio
-                const audioUrl = reviseTile.dataset.audioUrl;
-                const wordText = reviseTile.textContent;
-                if (audioUrl) {
-                    playWordAudio(audioUrl, wordText);
+            // After animation, swap cards and reset
+            setTimeout(() => {
+                // Move next card content to current card
+                if (reviseTileNext) {
+                    reviseTile.textContent = reviseTileNext.textContent;
+                    reviseTile.dataset.audioUrl = reviseTileNext.dataset.audioUrl;
+
+                    // Load new word for next card
+                    const nextWord = getRandomWord();
+                    reviseTileNext.textContent = nextWord.english;
+                    reviseTileNext.dataset.audioUrl = nextWord.audioUrl;
                 }
-            }
-        });
 
-        // Keep click event for desktop/mouse users
-        reviseTile.addEventListener('click', (e) => {
-            // Only trigger if not from a touch device
-            if (e.pointerType !== 'touch') {
-                const audioUrl = reviseTile.dataset.audioUrl;
-                const wordText = reviseTile.textContent;
-                if (audioUrl) {
-                    playWordAudio(audioUrl, wordText);
-                }
+                // Reset current card position
+                reviseTile.style.transition = 'none';
+                reviseTile.style.transform = '';
+                reviseTile.style.opacity = '';
+                reviseTile.classList.remove('swiping');
+
+                console.log('Card swiped - new word loaded');
+            }, 300);
+        } else {
+            // Didn't pass threshold - snap back
+            reviseTile.classList.remove('swiping');
+            reviseTile.classList.add('returning');
+            reviseTile.style.transform = '';
+            reviseTile.style.opacity = '';
+
+            // Remove returning class after animation
+            setTimeout(() => {
+                reviseTile.classList.remove('returning');
+            }, 300);
+        }
+    });
+
+    // Keep click event for desktop/mouse users
+    reviseTile.addEventListener('click', (e) => {
+        // Only trigger if not from a touch device
+        if (e.pointerType !== 'touch') {
+            const audioUrl = reviseTile.dataset.audioUrl;
+            const wordText = reviseTile.textContent;
+            if (audioUrl) {
+                playWordAudio(audioUrl, wordText);
             }
-        });
-    }
+        }
+    });
 
     console.log('Revise page set up complete');
 }
