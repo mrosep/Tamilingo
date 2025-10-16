@@ -46,12 +46,11 @@ header h1 {
 .home-tiles-container {
     display: flex;
     flex-direction: column;
-    gap: 50px;
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem 0 3rem 0;
+    padding: 0;
     height: calc(100vh - 180px);
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .home-tile {
@@ -295,8 +294,6 @@ main {
 
     .home-tiles-container {
         height: calc(100vh - 150px);
-        gap: 40px;
-        padding: 1.5rem 0 2.5rem 0;
     }
 
     .home-tile {
@@ -372,8 +369,6 @@ main {
 
     .home-tiles-container {
         height: calc(100vh - 120px);
-        gap: 35px;
-        padding: 1rem 0 2rem 0;
     }
 
     .home-tile {
@@ -447,8 +442,6 @@ main {
 
     .home-tiles-container {
         height: calc(100vh - 135px);
-        gap: 38px;
-        padding: 1.2rem 0 2.2rem 0;
     }
 
     .home-tile {
