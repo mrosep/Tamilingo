@@ -104,7 +104,8 @@ function setupNavigation() {
  */
 function getRandomWord() {
     const randomIndex = Math.floor(Math.random() * wordList.length);
-    return wordList[randomIndex];
+    return wordList[randomIndex  { english: "he informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/he_informal_dbdl1j.mp4" },
+];
 }
 
 /**
