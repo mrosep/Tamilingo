@@ -37,6 +37,9 @@ const wordList = [
   { english: "he or she formal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820466/he_or_she_formal_xjdpna.mp4" },
   { english: "you formal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/you_formal_tm9vfv.mp4" },
   { english: "what time is it", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299321/what_time_is_it_fflq7r.mp4" },
+  { english: "he informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/he_informal_dbdl1j.mp4" },
+  { english: "cow", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1759671038/cow_bw2oqd.mp4" },
+  { english: "two o'clock", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299320/two_o_clock_sbkr1m.mp4" },
 ];
 
 /**
@@ -104,10 +107,7 @@ function setupNavigation() {
  */
 function getRandomWord() {
     const randomIndex = Math.floor(Math.random() * wordList.length);
-    return wordList[randomIndex  { english: "he informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/he_informal_dbdl1j.mp4" },
-  { english: "cow", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1759671038/cow_bw2oqd.mp4" },
-  { english: "two o'clock", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299320/two_o_clock_sbkr1m.mp4" },
-];
+    return wordList[randomIndex];
 }
 
 /**

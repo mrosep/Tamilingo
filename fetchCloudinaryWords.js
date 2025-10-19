@@ -154,17 +154,21 @@ async function addWordToScriptJs(wordObj) {
     // Create the new entry to add
     const newEntry = `  { english: "${wordWithPunctuation}", audioUrl: "${wordObj.url}" },`;
 
-    // Find the closing of the wordList array (look for the pattern ];)
-    const wordListEndPattern = /(\s*)\];/;
-    const match = content.match(wordListEndPattern);
+    // Find the wordList array specifically by looking for "const wordList = ["
+    // Then find the FIRST occurrence of ]; after that point
+    const wordListStart = content.indexOf('const wordList = [');
 
-    if (!match) {
-      throw new Error('Could not find the end of wordList array in script.js');
+    if (wordListStart === -1) {
+      throw new Error('Could not find "const wordList = [" in script.js');
     }
 
-    // Insert the new entry before the closing ];
-    // We want to add it after the last word entry
-    const insertPosition = content.lastIndexOf('];');
+    // Find the first ]; after the wordList declaration
+    const searchFrom = wordListStart;
+    const insertPosition = content.indexOf('];', searchFrom);
+
+    if (insertPosition === -1) {
+      throw new Error('Could not find the closing ]; for wordList array in script.js');
+    }
 
     // Insert the new entry with proper indentation
     const before = content.substring(0, insertPosition);
