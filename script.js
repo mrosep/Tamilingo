@@ -40,6 +40,7 @@ const wordList = [
   { english: "he informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820467/he_informal_dbdl1j.mp4" },
   { english: "cow", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1759671038/cow_bw2oqd.mp4" },
   { english: "two o'clock", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299320/two_o_clock_sbkr1m.mp4" },
+  { english: "younger brother", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760869391/younger_brother_ewlmso.mp4" },
 ];
 
 /**
