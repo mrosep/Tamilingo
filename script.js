@@ -41,6 +41,7 @@ const wordList = [
   { english: "cow", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1759671038/cow_bw2oqd.mp4" },
   { english: "two o'clock", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299320/two_o_clock_sbkr1m.mp4" },
   { english: "younger brother", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760869391/younger_brother_ewlmso.mp4" },
+  { english: "one o'clock", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760299320/one_o_clock_o9pyca.mp4" },
 ];
 
 /**
