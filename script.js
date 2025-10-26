@@ -46,6 +46,7 @@ const wordList = [
   { english: "she informal", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1753820466/she_informal_fws9f7.mp4" },
   { english: "older sister", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760869391/older_sister_m5plec.mp4" },
   { english: "younger sister", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760869391/younger_sister_xukme0.mp4" },
+  { english: "mum", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1760869391/mum_aqvuye.mp4" },
 ];
 
 /**
