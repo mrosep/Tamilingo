@@ -58,6 +58,7 @@ const wordList = [
   { english: "horse", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842533/horse_qi25f6.mp4" },
   { english: "my age is", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939878/my_age_is_ex12g4.mp4" },
   { english: "black", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842533/black_kl0hqx.mp4" },
+  { english: "camel", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939879/camel_cnmo6h.mp4" },
 ];
 
 /**
