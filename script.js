@@ -60,6 +60,7 @@ const wordList = [
   { english: "black", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842533/black_kl0hqx.mp4" },
   { english: "camel", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939879/camel_cnmo6h.mp4" },
   { english: "cat", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842533/cat_ebh7kh.mp4" },
+  { english: "fish", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842534/fish_o218py.mp4" },
 ];
 
 /**
