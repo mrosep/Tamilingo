@@ -64,6 +64,7 @@ const wordList = [
   { english: "donkey", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939879/donkey_v79rvp.mp4" },
   { english: "tiger", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939879/tiger_v856h4.mp4" },
   { english: "elephant", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761939878/elephant_j6o5rg.mp4" },
+  { english: "pig", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842533/pig_t49nii.mp4" },
 ];
 
 /**
