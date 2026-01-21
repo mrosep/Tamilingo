@@ -74,6 +74,7 @@ const wordList = [
   { english: "mouse", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1761842532/mouse_fcthth.mp4" },
   { english: "purple", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/purple_lfssop.mp4" },
   { english: "rose", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/rose_pwwa5k.mp4" },
+  { english: "grey", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/grey_lfyrv9.mp4" },
 ];
 
 /**
