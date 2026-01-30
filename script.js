@@ -75,6 +75,7 @@ const wordList = [
   { english: "purple", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/purple_lfssop.mp4" },
   { english: "rose", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/rose_pwwa5k.mp4" },
   { english: "grey", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/grey_lfyrv9.mp4" },
+  { english: "toothbrush", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/toothbrush_c4cd2t.mp4" },
 ];
 
 /**
