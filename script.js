@@ -82,6 +82,10 @@ const wordList = [
 let reviseDeck = [];
 let currentCardIndex = 0;
 const STORAGE_KEY = 'tamilingo_revise_progress';
+const TRICKY_WORDS_KEY = 'tamilingo_tricky_words';
+
+// Tricky words list - persisted to localStorage
+let trickyWords = [];
 
 /**
  * Fisher-Yates shuffle algorithm - shuffles array in place
@@ -137,6 +141,59 @@ function loadReviseProgress() {
  */
 function clearReviseProgress() {
     localStorage.removeItem(STORAGE_KEY);
+}
+
+/**
+ * Loads tricky words from localStorage
+ */
+function loadTrickyWords() {
+    const saved = localStorage.getItem(TRICKY_WORDS_KEY);
+    if (saved) {
+        try {
+            trickyWords = JSON.parse(saved);
+            console.log(`Loaded ${trickyWords.length} tricky words`);
+        } catch (e) {
+            console.error('Error loading tricky words:', e);
+            trickyWords = [];
+        }
+    }
+}
+
+/**
+ * Saves tricky words to localStorage
+ */
+function saveTrickyWords() {
+    localStorage.setItem(TRICKY_WORDS_KEY, JSON.stringify(trickyWords));
+    console.log(`Saved ${trickyWords.length} tricky words`);
+}
+
+/**
+ * Adds a word to the tricky words list (if not already there)
+ * @param {Object} word - The word object to add
+ */
+function addToTrickyWords(word) {
+    // Check if word is already in the list
+    const exists = trickyWords.some(w => w.english === word.english);
+    if (!exists) {
+        trickyWords.push(word);
+        saveTrickyWords();
+        console.log(`Added "${word.english}" to tricky words`);
+    } else {
+        console.log(`"${word.english}" is already in tricky words`);
+    }
+}
+
+/**
+ * Removes a word from the tricky words list
+ * @param {Object} word - The word object to remove
+ */
+function removeFromTrickyWords(word) {
+    const index = trickyWords.findIndex(w => w.english === word.english);
+    if (index !== -1) {
+        trickyWords.splice(index, 1);
+        saveTrickyWords();
+        console.log(`Removed "${word.english}" from tricky words`);
+    }
 }
 
 /**
@@ -365,7 +422,7 @@ function setupRevisePage() {
     let touchStartX = 0;
     let touchStartTime = 0;
     let isSwiping = false;
-    const swipeThreshold = 100; // Pixels to swipe before auto-complete
+    const swipeThreshold = 80; // Pixels to swipe before auto-complete
 
     // Track touch start position
     reviseTile.addEventListener('touchstart', (e) => {
@@ -378,44 +435,46 @@ function setupRevisePage() {
         reviseTile.classList.add('swiping');
     });
 
-    // Track touch move - make card follow finger
+    // Track touch move - make card follow finger horizontally
     reviseTile.addEventListener('touchmove', (e) => {
         e.preventDefault(); // Prevent scrolling while swiping
 
-        const touchCurrentY = e.touches[0].clientY;
         const touchCurrentX = e.touches[0].clientX;
+        const touchCurrentY = e.touches[0].clientY;
 
-        const deltaY = touchStartY - touchCurrentY; // Positive = swipe up
-        const deltaX = touchCurrentX - touchStartX; // For slight horizontal arc
+        const deltaX = touchCurrentX - touchStartX; // Positive = swipe right, Negative = swipe left
+        const deltaY = touchCurrentY - touchStartY;
 
-        // If moved more than 10px, consider it a swipe
-        if (Math.abs(deltaY) > 10) {
+        // If moved more than 10px horizontally, consider it a swipe
+        if (Math.abs(deltaX) > 10) {
             isSwiping = true;
         }
 
-        // Only move card if swiping upward
-        if (deltaY > 0) {
-            // Calculate rotation for arc effect (max 15 degrees)
-            const rotation = (deltaX / window.innerWidth) * 15;
+        // Move card following finger (horizontal swipe)
+        if (Math.abs(deltaX) > 5) {
+            // Calculate rotation based on swipe direction (tilt towards direction)
+            const rotation = (deltaX / window.innerWidth) * 20;
 
-            // Calculate opacity (fade as it moves up)
-            const opacity = Math.max(0, 1 - (deltaY / 300));
+            // Calculate opacity (fade as it moves away from center)
+            const opacity = Math.max(0.3, 1 - (Math.abs(deltaX) / 400));
 
-            // Apply transform: move and rotate
-            reviseTile.style.transform = `translateY(-${deltaY}px) translateX(${deltaX * 0.3}px) rotate(${rotation}deg)`;
+            // Apply transform: move horizontally and rotate
+            reviseTile.style.transform = `translateX(${deltaX}px) translateY(${deltaY * 0.2}px) rotate(${rotation}deg)`;
             reviseTile.style.opacity = opacity;
         }
     });
 
     // Handle touch end
     reviseTile.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
         const touchEndY = e.changedTouches[0].clientY;
-        const swipeDistance = touchStartY - touchEndY;
+        const swipeDistanceX = touchEndX - touchStartX;
+        const swipeDistanceY = touchEndY - touchStartY;
         const swipeTime = Date.now() - touchStartTime;
-        const swipeVelocity = swipeDistance / swipeTime;
+        const swipeVelocity = Math.abs(swipeDistanceX) / swipeTime;
 
-        // Check if it's a quick tap (less than 200ms and small distance)
-        if (!isSwiping && swipeTime < 200 && Math.abs(swipeDistance) < 10) {
+        // Check if it's a quick tap (less than 200ms and small movement)
+        if (!isSwiping && swipeTime < 200 && Math.abs(swipeDistanceX) < 15 && Math.abs(swipeDistanceY) < 15) {
             // Tap detected - play audio
             const audioUrl = reviseTile.dataset.audioUrl;
             const wordText = reviseTile.textContent;
@@ -429,13 +488,22 @@ function setupRevisePage() {
         }
 
         // Check if swipe passed threshold or has high velocity
-        if ((isSwiping && swipeDistance > swipeThreshold) || swipeVelocity > 0.5) {
-            // Complete the swipe - animate card off screen
+        const swipedRight = swipeDistanceX > swipeThreshold || (swipeDistanceX > 30 && swipeVelocity > 0.3);
+        const swipedLeft = swipeDistanceX < -swipeThreshold || (swipeDistanceX < -30 && swipeVelocity > 0.3);
+
+        if (swipedRight || swipedLeft) {
+            // Get current word before advancing
+            const currentWord = getCurrentWord();
+
+            // Determine direction and animate off screen
+            const direction = swipedRight ? 1 : -1;
+            const rotation = direction * 30;
+
             reviseTile.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
-            reviseTile.style.transform = 'translateY(-150vh) rotate(20deg)';
+            reviseTile.style.transform = `translateX(${direction * 150}vw) rotate(${rotation}deg)`;
             reviseTile.style.opacity = '0';
 
-            // After animation, advance to next card
+            // After animation, handle the swipe result
             setTimeout(() => {
                 // Reset current card position first
                 reviseTile.style.transition = 'none';
@@ -443,10 +511,17 @@ function setupRevisePage() {
                 reviseTile.style.opacity = '';
                 reviseTile.classList.remove('swiping');
 
+                // Handle based on swipe direction
+                if (swipedLeft && currentWord) {
+                    // Swiped LEFT = Tricky - add to tricky words
+                    addToTrickyWords(currentWord);
+                    console.log('Card swiped LEFT (Tricky) - added to tricky words');
+                } else {
+                    console.log('Card swiped RIGHT (Easy)');
+                }
+
                 // Advance to the next card in the deck
                 advanceToNextCard();
-
-                console.log('Card swiped - advanced to next word');
             }, 300);
         } else {
             // Didn't pass threshold - snap back
@@ -586,6 +661,9 @@ function playWordAudio(audioUrl, wordText) {
  * Initializes the Tamilingo app when the page loads
  */
 function initializeApp() {
+    // Load tricky words from localStorage
+    loadTrickyWords();
+
     // Set up navigation between pages
     setupNavigation();
 
