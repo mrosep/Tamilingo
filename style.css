@@ -116,30 +116,38 @@ header h1 {
 }
 
 /* Revise page styles */
+#revise-page {
+    position: relative;
+}
+
 .swipe-indicators {
+    position: absolute;
+    top: 8rem;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 1.5rem 2rem;
-    margin-top: 1rem;
+    padding: 0 2rem;
+    z-index: 5;
+    pointer-events: none;
 }
 
 .swipe-indicator {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.5rem;
 }
 
 .indicator-label {
-    font-size: 1.4rem;
-    font-weight: 500;
+    font-size: 1.8rem;
+    font-weight: 600;
     color: #2d5016;
-    opacity: 0.8;
 }
 
 .indicator-arrow {
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-weight: bold;
 }
 
@@ -387,15 +395,16 @@ main {
     }
 
     .swipe-indicators {
-        padding: 1rem 1.5rem;
+        top: 6rem;
+        padding: 0 1.5rem;
     }
 
     .indicator-label {
-        font-size: 1.2rem;
+        font-size: 1.6rem;
     }
 
     .indicator-arrow {
-        font-size: 2.2rem;
+        font-size: 3rem;
     }
 
     .revise-container {
@@ -477,15 +486,16 @@ main {
     }
 
     .swipe-indicators {
-        padding: 0.8rem 1rem;
+        top: 4rem;
+        padding: 0 0.8rem;
     }
 
     .indicator-label {
-        font-size: 1rem;
+        font-size: 1.3rem;
     }
 
     .indicator-arrow {
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
 
     .revise-container {
@@ -565,15 +575,16 @@ main {
     }
 
     .swipe-indicators {
-        padding: 0.9rem 1.2rem;
+        top: 5rem;
+        padding: 0 1rem;
     }
 
     .indicator-label {
-        font-size: 1.1rem;
+        font-size: 1.4rem;
     }
 
     .indicator-arrow {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .revise-container {
