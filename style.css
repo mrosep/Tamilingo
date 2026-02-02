@@ -56,10 +56,10 @@ header h1 {
 .home-tile {
     background: #4a7c59;
     color: white;
-    height: 25vh;
+    height: 18vh;
     border-radius: 20px;
     cursor: pointer;
-    font-size: 3.5rem;
+    font-size: 3rem;
     font-weight: 500;
     text-align: center;
     box-shadow: 0 6px 20px rgba(74, 124, 89, 0.5);
@@ -116,7 +116,8 @@ header h1 {
 }
 
 /* Revise page styles */
-#revise-page {
+#revise-page,
+#tricky-page {
     position: relative;
 }
 
@@ -240,8 +241,15 @@ header h1 {
     color: #2d5016;
     font-size: 2.5rem;
     font-weight: 500;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.empty-hint {
+    color: #2d5016;
+    font-size: 1.3rem;
+    opacity: 0.8;
+    margin-top: 0;
 }
 
 .revise-again-btn {
@@ -385,8 +393,8 @@ main {
     }
 
     .home-tile {
-        font-size: 3rem;
-        height: 25vh;
+        font-size: 2.5rem;
+        height: 17vh;
     }
 
     .back-button {
@@ -476,8 +484,8 @@ main {
     }
 
     .home-tile {
-        font-size: 2.2rem;
-        height: 25vh;
+        font-size: 1.8rem;
+        height: 16vh;
     }
 
     .back-button {
@@ -565,8 +573,8 @@ main {
     }
 
     .home-tile {
-        font-size: 2.6rem;
-        height: 25vh;
+        font-size: 2rem;
+        height: 16vh;
     }
 
     .back-button {

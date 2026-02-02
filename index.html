@@ -22,6 +22,9 @@
                 <div class="home-tile" data-page="revise">
                     <span>Revise</span>
                 </div>
+                <div class="home-tile" data-page="tricky">
+                    <span>Tricky Words</span>
+                </div>
             </div>
         </div>
 
@@ -67,6 +70,42 @@
                 <div class="complete-content">
                     <h2>Congrats, all words revised!</h2>
                     <button id="revise-again-btn" class="revise-again-btn">Revise again?</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tricky Words Page -->
+        <div id="tricky-page" class="page">
+            <div class="swipe-indicators" id="tricky-indicators">
+                <div class="swipe-indicator swipe-left">
+                    <span class="indicator-label">Keep</span>
+                    <span class="indicator-arrow red">&#8592;</span>
+                </div>
+                <div class="swipe-indicator swipe-right">
+                    <span class="indicator-label">Got it!</span>
+                    <span class="indicator-arrow green">&#8594;</span>
+                </div>
+            </div>
+            <div class="revise-container" id="tricky-container">
+                <div id="tricky-tile-next" class="revise-tile revise-tile-next">
+                    <!-- Next tricky word will be displayed here -->
+                </div>
+                <div id="tricky-tile" class="revise-tile revise-tile-current">
+                    <!-- Current tricky word will be displayed here -->
+                </div>
+            </div>
+            <!-- Empty state - shown when no tricky words -->
+            <div id="tricky-empty" class="revise-complete hidden">
+                <div class="complete-content">
+                    <h2>No tricky words yet!</h2>
+                    <p class="empty-hint">Swipe left on words in Revise to add them here.</p>
+                </div>
+            </div>
+            <!-- Completion screen - shown when all tricky words reviewed -->
+            <div id="tricky-complete" class="revise-complete hidden">
+                <div class="complete-content">
+                    <h2>All tricky words reviewed!</h2>
+                    <button id="tricky-again-btn" class="revise-again-btn">Review again?</button>
                 </div>
             </div>
         </div>

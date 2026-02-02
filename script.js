@@ -87,6 +87,10 @@ const TRICKY_WORDS_KEY = 'tamilingo_tricky_words';
 // Tricky words list - persisted to localStorage
 let trickyWords = [];
 
+// Tricky page deck state
+let trickyDeck = [];
+let trickyCardIndex = 0;
+
 /**
  * Fisher-Yates shuffle algorithm - shuffles array in place
  * @param {Array} array - The array to shuffle
@@ -284,6 +288,11 @@ function navigateTo(pageName, updateHistory = true) {
         if (pageName === 'revise') {
             initializeRevisePage();
         }
+
+        // If navigating to tricky page, initialize it
+        if (pageName === 'tricky') {
+            initializeTrickyPage();
+        }
     } else {
         console.error(`Page not found: ${pageName}`);
     }
@@ -407,6 +416,305 @@ function restartRevision() {
     hideCompletionScreen();
     showCurrentWord();
     console.log('Revision restarted with new shuffle');
+}
+
+// ============================================
+// TRICKY WORDS PAGE FUNCTIONS
+// ============================================
+
+/**
+ * Initializes the tricky words page
+ */
+function initializeTrickyPage() {
+    // Check if there are any tricky words
+    if (trickyWords.length === 0) {
+        showTrickyEmptyScreen();
+        return;
+    }
+
+    // Shuffle the tricky words into a deck
+    trickyDeck = shuffleArray(trickyWords);
+    trickyCardIndex = 0;
+
+    hideTrickyEmptyScreen();
+    hideTrickyCompletionScreen();
+    showTrickyCurrentWord();
+}
+
+/**
+ * Gets the current tricky word from the deck
+ */
+function getTrickyCurrentWord() {
+    if (trickyCardIndex >= trickyDeck.length) {
+        return null;
+    }
+    return trickyDeck[trickyCardIndex];
+}
+
+/**
+ * Gets the next tricky word from the deck (for preview)
+ */
+function getTrickyNextWord() {
+    if (trickyCardIndex + 1 >= trickyDeck.length) {
+        return null;
+    }
+    return trickyDeck[trickyCardIndex + 1];
+}
+
+/**
+ * Displays the current tricky word on the tile
+ */
+function showTrickyCurrentWord() {
+    const trickyTile = document.getElementById('tricky-tile');
+    const trickyTileNext = document.getElementById('tricky-tile-next');
+
+    if (!trickyTile) return;
+
+    const currentWord = getTrickyCurrentWord();
+
+    if (!currentWord) {
+        showTrickyCompletionScreen();
+        return;
+    }
+
+    trickyTile.textContent = currentWord.english;
+    trickyTile.dataset.audioUrl = currentWord.audioUrl;
+
+    if (trickyTileNext) {
+        const nextWord = getTrickyNextWord();
+        if (nextWord) {
+            trickyTileNext.textContent = nextWord.english;
+            trickyTileNext.dataset.audioUrl = nextWord.audioUrl;
+            trickyTileNext.style.visibility = 'visible';
+        } else {
+            trickyTileNext.textContent = '';
+            trickyTileNext.style.visibility = 'hidden';
+        }
+    }
+
+    console.log(`Showing tricky word ${trickyCardIndex + 1}/${trickyDeck.length}: ${currentWord.english}`);
+}
+
+/**
+ * Advances to the next tricky card
+ * @param {boolean} removeWord - Whether to remove the current word from tricky list
+ */
+function advanceToNextTrickyCard(removeWord = false) {
+    const currentWord = getTrickyCurrentWord();
+
+    if (removeWord && currentWord) {
+        removeFromTrickyWords(currentWord);
+    }
+
+    trickyCardIndex++;
+
+    if (trickyCardIndex >= trickyDeck.length) {
+        // Check if there are still tricky words left (some may have been removed)
+        if (trickyWords.length === 0) {
+            showTrickyEmptyScreen();
+        } else {
+            showTrickyCompletionScreen();
+        }
+    } else {
+        showTrickyCurrentWord();
+    }
+}
+
+/**
+ * Shows the empty state screen for tricky words
+ */
+function showTrickyEmptyScreen() {
+    const trickyEmpty = document.getElementById('tricky-empty');
+    const trickyContainer = document.getElementById('tricky-container');
+    const trickyIndicators = document.getElementById('tricky-indicators');
+    const trickyComplete = document.getElementById('tricky-complete');
+
+    if (trickyEmpty) trickyEmpty.classList.remove('hidden');
+    if (trickyContainer) trickyContainer.style.display = 'none';
+    if (trickyIndicators) trickyIndicators.style.display = 'none';
+    if (trickyComplete) trickyComplete.classList.add('hidden');
+}
+
+/**
+ * Hides the empty state screen
+ */
+function hideTrickyEmptyScreen() {
+    const trickyEmpty = document.getElementById('tricky-empty');
+    const trickyContainer = document.getElementById('tricky-container');
+    const trickyIndicators = document.getElementById('tricky-indicators');
+
+    if (trickyEmpty) trickyEmpty.classList.add('hidden');
+    if (trickyContainer) trickyContainer.style.display = 'flex';
+    if (trickyIndicators) trickyIndicators.style.display = 'flex';
+}
+
+/**
+ * Shows the completion screen for tricky words
+ */
+function showTrickyCompletionScreen() {
+    const trickyComplete = document.getElementById('tricky-complete');
+    const trickyContainer = document.getElementById('tricky-container');
+    const trickyIndicators = document.getElementById('tricky-indicators');
+    const trickyEmpty = document.getElementById('tricky-empty');
+
+    if (trickyComplete) trickyComplete.classList.remove('hidden');
+    if (trickyContainer) trickyContainer.style.display = 'none';
+    if (trickyIndicators) trickyIndicators.style.display = 'none';
+    if (trickyEmpty) trickyEmpty.classList.add('hidden');
+}
+
+/**
+ * Hides the completion screen for tricky words
+ */
+function hideTrickyCompletionScreen() {
+    const trickyComplete = document.getElementById('tricky-complete');
+    const trickyContainer = document.getElementById('tricky-container');
+    const trickyIndicators = document.getElementById('tricky-indicators');
+
+    if (trickyComplete) trickyComplete.classList.add('hidden');
+    if (trickyContainer) trickyContainer.style.display = 'flex';
+    if (trickyIndicators) trickyIndicators.style.display = 'flex';
+}
+
+/**
+ * Restarts the tricky words review
+ */
+function restartTrickyReview() {
+    if (trickyWords.length === 0) {
+        showTrickyEmptyScreen();
+        return;
+    }
+    trickyDeck = shuffleArray(trickyWords);
+    trickyCardIndex = 0;
+    hideTrickyCompletionScreen();
+    hideTrickyEmptyScreen();
+    showTrickyCurrentWord();
+    console.log('Tricky review restarted');
+}
+
+/**
+ * Sets up the tricky page functionality with interactive swipe
+ */
+function setupTrickyPage() {
+    const trickyTile = document.getElementById('tricky-tile');
+
+    if (!trickyTile) return;
+
+    let touchStartY = 0;
+    let touchStartX = 0;
+    let touchStartTime = 0;
+    let isSwiping = false;
+    const swipeThreshold = 80;
+
+    trickyTile.addEventListener('touchstart', (e) => {
+        touchStartY = e.touches[0].clientY;
+        touchStartX = e.touches[0].clientX;
+        touchStartTime = Date.now();
+        isSwiping = false;
+        trickyTile.classList.add('swiping');
+    });
+
+    trickyTile.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+
+        const touchCurrentX = e.touches[0].clientX;
+        const touchCurrentY = e.touches[0].clientY;
+
+        const deltaX = touchCurrentX - touchStartX;
+        const deltaY = touchCurrentY - touchStartY;
+
+        if (Math.abs(deltaX) > 10) {
+            isSwiping = true;
+        }
+
+        if (Math.abs(deltaX) > 5) {
+            const rotation = (deltaX / window.innerWidth) * 20;
+            const opacity = Math.max(0.3, 1 - (Math.abs(deltaX) / 400));
+            trickyTile.style.transform = `translateX(${deltaX}px) translateY(${deltaY * 0.2}px) rotate(${rotation}deg)`;
+            trickyTile.style.opacity = opacity;
+        }
+    });
+
+    trickyTile.addEventListener('touchend', (e) => {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const swipeDistanceX = touchEndX - touchStartX;
+        const swipeDistanceY = touchEndY - touchStartY;
+        const swipeTime = Date.now() - touchStartTime;
+        const swipeVelocity = Math.abs(swipeDistanceX) / swipeTime;
+
+        // Check for tap
+        if (!isSwiping && swipeTime < 200 && Math.abs(swipeDistanceX) < 15 && Math.abs(swipeDistanceY) < 15) {
+            const audioUrl = trickyTile.dataset.audioUrl;
+            const wordText = trickyTile.textContent;
+            if (audioUrl) {
+                playWordAudio(audioUrl, wordText);
+            }
+            trickyTile.classList.remove('swiping');
+            trickyTile.style.transform = '';
+            trickyTile.style.opacity = '';
+            return;
+        }
+
+        const swipedRight = swipeDistanceX > swipeThreshold || (swipeDistanceX > 30 && swipeVelocity > 0.3);
+        const swipedLeft = swipeDistanceX < -swipeThreshold || (swipeDistanceX < -30 && swipeVelocity > 0.3);
+
+        if (swipedRight || swipedLeft) {
+            const direction = swipedRight ? 1 : -1;
+            const rotation = direction * 30;
+
+            trickyTile.style.transition = 'transform 0.3s ease-out, opacity 0.3s ease-out';
+            trickyTile.style.transform = `translateX(${direction * 150}vw) rotate(${rotation}deg)`;
+            trickyTile.style.opacity = '0';
+
+            setTimeout(() => {
+                trickyTile.style.transition = 'none';
+                trickyTile.style.transform = '';
+                trickyTile.style.opacity = '';
+                trickyTile.classList.remove('swiping');
+
+                if (swipedRight) {
+                    // Swiped RIGHT = Got it! Remove from tricky words
+                    console.log('Card swiped RIGHT (Got it!) - removing from tricky words');
+                    advanceToNextTrickyCard(true);
+                } else {
+                    // Swiped LEFT = Keep in tricky words
+                    console.log('Card swiped LEFT (Keep)');
+                    advanceToNextTrickyCard(false);
+                }
+            }, 300);
+        } else {
+            trickyTile.classList.remove('swiping');
+            trickyTile.classList.add('returning');
+            trickyTile.style.transform = '';
+            trickyTile.style.opacity = '';
+
+            setTimeout(() => {
+                trickyTile.classList.remove('returning');
+            }, 300);
+        }
+    });
+
+    // Click for audio (desktop)
+    trickyTile.addEventListener('click', (e) => {
+        if (e.pointerType !== 'touch') {
+            const audioUrl = trickyTile.dataset.audioUrl;
+            const wordText = trickyTile.textContent;
+            if (audioUrl) {
+                playWordAudio(audioUrl, wordText);
+            }
+        }
+    });
+
+    // Set up "Review again?" button
+    const trickyAgainBtn = document.getElementById('tricky-again-btn');
+    if (trickyAgainBtn) {
+        trickyAgainBtn.addEventListener('click', () => {
+            restartTrickyReview();
+        });
+    }
+
+    console.log('Tricky page set up complete');
 }
 
 /**
@@ -669,6 +977,9 @@ function initializeApp() {
 
     // Set up revise page functionality
     setupRevisePage();
+
+    // Set up tricky page functionality
+    setupTrickyPage();
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
