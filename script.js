@@ -91,6 +91,10 @@ let trickyWords = [];
 let trickyDeck = [];
 let trickyCardIndex = 0;
 
+// Listen page deck state
+let listenDeck = [];
+let listenCardIndex = 0;
+
 /**
  * Fisher-Yates shuffle algorithm - shuffles array in place
  * @param {Array} array - The array to shuffle
@@ -292,6 +296,11 @@ function navigateTo(pageName, updateHistory = true) {
         // If navigating to tricky page, initialize it
         if (pageName === 'tricky') {
             initializeTrickyPage();
+        }
+
+        // If navigating to listen page, initialize it
+        if (pageName === 'listen') {
+            initializeListenPage();
         }
     } else {
         console.error(`Page not found: ${pageName}`);
@@ -717,6 +726,211 @@ function setupTrickyPage() {
     console.log('Tricky page set up complete');
 }
 
+// ============================================
+// LISTEN PAGE FUNCTIONS
+// ============================================
+
+/**
+ * Initializes the listen page
+ */
+function initializeListenPage() {
+    // Shuffle the word list for listening practice
+    listenDeck = shuffleArray(wordList);
+    listenCardIndex = 0;
+
+    // Reset UI
+    hideListenCompletionScreen();
+    resetListenUI();
+
+    // Auto-play the first audio after a short delay
+    setTimeout(() => {
+        playCurrentListenAudio();
+    }, 500);
+
+    console.log('Listen page initialized with', listenDeck.length, 'words');
+}
+
+/**
+ * Gets the current word from the listen deck
+ */
+function getListenCurrentWord() {
+    if (listenCardIndex >= listenDeck.length) {
+        return null;
+    }
+    return listenDeck[listenCardIndex];
+}
+
+/**
+ * Plays the audio for the current listen word
+ */
+function playCurrentListenAudio() {
+    const currentWord = getListenCurrentWord();
+    if (currentWord && currentWord.audioUrl) {
+        const audio = new Audio(currentWord.audioUrl);
+        audio.play().catch(error => {
+            console.error('Error playing audio:', error);
+        });
+        console.log('Playing audio for listen practice');
+    }
+}
+
+/**
+ * Checks the user's answer
+ */
+function checkListenAnswer() {
+    const input = document.getElementById('listen-input');
+    const feedback = document.getElementById('listen-feedback');
+    const feedbackText = document.getElementById('feedback-text');
+    const currentWord = getListenCurrentWord();
+
+    if (!input || !currentWord) return;
+
+    const userAnswer = input.value.trim().toLowerCase();
+    const correctAnswer = currentWord.english.toLowerCase();
+
+    // Show feedback
+    feedback.classList.remove('hidden', 'correct', 'incorrect');
+
+    if (userAnswer === correctAnswer) {
+        feedback.classList.add('correct');
+        feedbackText.textContent = 'Correct! ✓';
+    } else {
+        feedback.classList.add('incorrect');
+        feedbackText.textContent = `The answer was: ${currentWord.english}`;
+    }
+
+    // Disable input and check button
+    input.disabled = true;
+    document.getElementById('check-answer-btn').disabled = true;
+}
+
+/**
+ * Advances to the next listen word
+ */
+function advanceToNextListenWord() {
+    listenCardIndex++;
+
+    if (listenCardIndex >= listenDeck.length) {
+        showListenCompletionScreen();
+    } else {
+        resetListenUI();
+        // Auto-play the next audio
+        setTimeout(() => {
+            playCurrentListenAudio();
+        }, 300);
+    }
+}
+
+/**
+ * Resets the listen UI for a new word
+ */
+function resetListenUI() {
+    const input = document.getElementById('listen-input');
+    const feedback = document.getElementById('listen-feedback');
+    const checkBtn = document.getElementById('check-answer-btn');
+    const listenContainer = document.querySelector('.listen-container');
+
+    if (input) {
+        input.value = '';
+        input.disabled = false;
+        input.focus();
+    }
+    if (feedback) {
+        feedback.classList.add('hidden');
+        feedback.classList.remove('correct', 'incorrect');
+    }
+    if (checkBtn) {
+        checkBtn.disabled = false;
+    }
+    if (listenContainer) {
+        listenContainer.style.display = 'flex';
+    }
+}
+
+/**
+ * Shows the listen completion screen
+ */
+function showListenCompletionScreen() {
+    const listenComplete = document.getElementById('listen-complete');
+    const listenContainer = document.querySelector('.listen-container');
+
+    if (listenComplete) listenComplete.classList.remove('hidden');
+    if (listenContainer) listenContainer.style.display = 'none';
+
+    console.log('Listen practice complete');
+}
+
+/**
+ * Hides the listen completion screen
+ */
+function hideListenCompletionScreen() {
+    const listenComplete = document.getElementById('listen-complete');
+    const listenContainer = document.querySelector('.listen-container');
+
+    if (listenComplete) listenComplete.classList.add('hidden');
+    if (listenContainer) listenContainer.style.display = 'flex';
+}
+
+/**
+ * Restarts listen practice
+ */
+function restartListenPractice() {
+    listenDeck = shuffleArray(wordList);
+    listenCardIndex = 0;
+    hideListenCompletionScreen();
+    resetListenUI();
+    setTimeout(() => {
+        playCurrentListenAudio();
+    }, 500);
+    console.log('Listen practice restarted');
+}
+
+/**
+ * Sets up the listen page event listeners
+ */
+function setupListenPage() {
+    const playBtn = document.getElementById('play-audio-btn');
+    const checkBtn = document.getElementById('check-answer-btn');
+    const nextBtn = document.getElementById('next-word-btn');
+    const listenAgainBtn = document.getElementById('listen-again-btn');
+    const listenInput = document.getElementById('listen-input');
+
+    if (playBtn) {
+        playBtn.addEventListener('click', () => {
+            playCurrentListenAudio();
+        });
+    }
+
+    if (checkBtn) {
+        checkBtn.addEventListener('click', () => {
+            checkListenAnswer();
+        });
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            advanceToNextListenWord();
+        });
+    }
+
+    if (listenAgainBtn) {
+        listenAgainBtn.addEventListener('click', () => {
+            restartListenPractice();
+        });
+    }
+
+    // Allow Enter key to submit answer
+    if (listenInput) {
+        listenInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !listenInput.disabled) {
+                checkListenAnswer();
+            }
+        });
+    }
+
+    console.log('Listen page set up complete');
+}
+
 /**
  * Sets up the revise page functionality with interactive swipe
  */
@@ -980,6 +1194,9 @@ function initializeApp() {
 
     // Set up tricky page functionality
     setupTrickyPage();
+
+    // Set up listen page functionality
+    setupListenPage();
 
     // Handle browser back/forward buttons
     window.addEventListener('popstate', (event) => {
