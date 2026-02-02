@@ -155,7 +155,7 @@ function initializeNewDeck() {
 function showCompletionScreen() {
     const reviseComplete = document.getElementById('revise-complete');
     const reviseContainer = document.querySelector('.revise-container');
-    const swipeInstruction = document.querySelector('.swipe-instruction');
+    const swipeIndicators = document.querySelector('.swipe-indicators');
 
     if (reviseComplete) {
         reviseComplete.classList.remove('hidden');
@@ -163,8 +163,8 @@ function showCompletionScreen() {
     if (reviseContainer) {
         reviseContainer.style.display = 'none';
     }
-    if (swipeInstruction) {
-        swipeInstruction.style.display = 'none';
+    if (swipeIndicators) {
+        swipeIndicators.style.display = 'none';
     }
 
     console.log('Showing completion screen');
@@ -176,7 +176,7 @@ function showCompletionScreen() {
 function hideCompletionScreen() {
     const reviseComplete = document.getElementById('revise-complete');
     const reviseContainer = document.querySelector('.revise-container');
-    const swipeInstruction = document.querySelector('.swipe-instruction');
+    const swipeIndicators = document.querySelector('.swipe-indicators');
 
     if (reviseComplete) {
         reviseComplete.classList.add('hidden');
@@ -184,8 +184,8 @@ function hideCompletionScreen() {
     if (reviseContainer) {
         reviseContainer.style.display = 'flex';
     }
-    if (swipeInstruction) {
-        swipeInstruction.style.display = 'block';
+    if (swipeIndicators) {
+        swipeIndicators.style.display = 'flex';
     }
 }
 
