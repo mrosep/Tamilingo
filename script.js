@@ -78,6 +78,117 @@ const wordList = [
   { english: "toothbrush", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/toothbrush_c4cd2t.mp4" },
 ];
 
+// Revise deck state - for shuffle without replacement
+let reviseDeck = [];
+let currentCardIndex = 0;
+const STORAGE_KEY = 'tamilingo_revise_progress';
+
+/**
+ * Fisher-Yates shuffle algorithm - shuffles array in place
+ * @param {Array} array - The array to shuffle
+ * @returns {Array} - The shuffled array
+ */
+function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+/**
+ * Saves the current revise progress to localStorage
+ */
+function saveReviseProgress() {
+    const progress = {
+        deck: reviseDeck,
+        index: currentCardIndex
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    console.log(`Progress saved: card ${currentCardIndex + 1} of ${reviseDeck.length}`);
+}
+
+/**
+ * Loads revise progress from localStorage
+ * @returns {boolean} - True if progress was loaded, false if starting fresh
+ */
+function loadReviseProgress() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+        try {
+            const progress = JSON.parse(saved);
+            // Validate that the saved deck matches current wordList length
+            if (progress.deck && progress.deck.length === wordList.length) {
+                reviseDeck = progress.deck;
+                currentCardIndex = progress.index;
+                console.log(`Progress loaded: resuming at card ${currentCardIndex + 1} of ${reviseDeck.length}`);
+                return true;
+            }
+        } catch (e) {
+            console.error('Error loading progress:', e);
+        }
+    }
+    return false;
+}
+
+/**
+ * Clears saved progress from localStorage
+ */
+function clearReviseProgress() {
+    localStorage.removeItem(STORAGE_KEY);
+}
+
+/**
+ * Initializes a new shuffled deck
+ */
+function initializeNewDeck() {
+    reviseDeck = shuffleArray(wordList);
+    currentCardIndex = 0;
+    saveReviseProgress();
+    console.log('New deck initialized with', reviseDeck.length, 'words');
+}
+
+/**
+ * Shows the completion screen
+ */
+function showCompletionScreen() {
+    const reviseComplete = document.getElementById('revise-complete');
+    const reviseContainer = document.querySelector('.revise-container');
+    const swipeInstruction = document.querySelector('.swipe-instruction');
+
+    if (reviseComplete) {
+        reviseComplete.classList.remove('hidden');
+    }
+    if (reviseContainer) {
+        reviseContainer.style.display = 'none';
+    }
+    if (swipeInstruction) {
+        swipeInstruction.style.display = 'none';
+    }
+
+    console.log('Showing completion screen');
+}
+
+/**
+ * Hides the completion screen and shows the cards
+ */
+function hideCompletionScreen() {
+    const reviseComplete = document.getElementById('revise-complete');
+    const reviseContainer = document.querySelector('.revise-container');
+    const swipeInstruction = document.querySelector('.swipe-instruction');
+
+    if (reviseComplete) {
+        reviseComplete.classList.add('hidden');
+    }
+    if (reviseContainer) {
+        reviseContainer.style.display = 'flex';
+    }
+    if (swipeInstruction) {
+        swipeInstruction.style.display = 'block';
+    }
+}
+
 /**
  * Navigates to a specific page by hiding all pages and showing the target page
  * @param {string} pageName - The name of the page to navigate to (home, word-list, revise)
@@ -112,9 +223,9 @@ function navigateTo(pageName, updateHistory = true) {
             createWordTiles();
         }
 
-        // If navigating to revise page, show a random word
+        // If navigating to revise page, initialize or resume the deck
         if (pageName === 'revise') {
-            showRandomWord();
+            initializeRevisePage();
         }
     } else {
         console.error(`Page not found: ${pageName}`);
@@ -138,37 +249,107 @@ function setupNavigation() {
 }
 
 /**
- * Gets a random word from the word list
- * @returns {Object} - A random word object with english and audioUrl properties
+ * Gets the current word from the shuffled deck
+ * @returns {Object|null} - The current word object or null if deck is exhausted
  */
-function getRandomWord() {
-    const randomIndex = Math.floor(Math.random() * wordList.length);
-    return wordList[randomIndex];
+function getCurrentWord() {
+    if (currentCardIndex >= reviseDeck.length) {
+        return null;
+    }
+    return reviseDeck[currentCardIndex];
 }
 
 /**
- * Displays a random word on the revise tile
+ * Gets the next word from the shuffled deck (for preview)
+ * @returns {Object|null} - The next word object or null if no more words
  */
-function showRandomWord() {
+function getNextWord() {
+    if (currentCardIndex + 1 >= reviseDeck.length) {
+        return null;
+    }
+    return reviseDeck[currentCardIndex + 1];
+}
+
+/**
+ * Initializes or resumes the revise page
+ */
+function initializeRevisePage() {
+    // Try to load saved progress, otherwise start fresh
+    if (!loadReviseProgress()) {
+        initializeNewDeck();
+    }
+
+    // Check if we've already completed the deck
+    if (currentCardIndex >= reviseDeck.length) {
+        showCompletionScreen();
+    } else {
+        hideCompletionScreen();
+        showCurrentWord();
+    }
+}
+
+/**
+ * Displays the current word on the revise tile
+ */
+function showCurrentWord() {
     const reviseTile = document.getElementById('revise-tile');
     const reviseTileNext = document.getElementById('revise-tile-next');
 
     if (!reviseTile) return;
 
-    const randomWord = getRandomWord();
+    const currentWord = getCurrentWord();
 
-    // Clear previous content and add new word to current tile
-    reviseTile.textContent = randomWord.english;
-    reviseTile.dataset.audioUrl = randomWord.audioUrl;
-
-    // Also prepare next card
-    if (reviseTileNext) {
-        const nextWord = getRandomWord();
-        reviseTileNext.textContent = nextWord.english;
-        reviseTileNext.dataset.audioUrl = nextWord.audioUrl;
+    if (!currentWord) {
+        // Deck exhausted - show completion screen
+        showCompletionScreen();
+        return;
     }
 
-    console.log(`Showing random word: ${randomWord.english}`);
+    // Clear previous content and add current word
+    reviseTile.textContent = currentWord.english;
+    reviseTile.dataset.audioUrl = currentWord.audioUrl;
+
+    // Prepare next card preview
+    if (reviseTileNext) {
+        const nextWord = getNextWord();
+        if (nextWord) {
+            reviseTileNext.textContent = nextWord.english;
+            reviseTileNext.dataset.audioUrl = nextWord.audioUrl;
+            reviseTileNext.style.visibility = 'visible';
+        } else {
+            // No more words after this one - hide the preview
+            reviseTileNext.textContent = '';
+            reviseTileNext.style.visibility = 'hidden';
+        }
+    }
+
+    console.log(`Showing word ${currentCardIndex + 1}/${reviseDeck.length}: ${currentWord.english}`);
+}
+
+/**
+ * Advances to the next card in the deck
+ */
+function advanceToNextCard() {
+    currentCardIndex++;
+    saveReviseProgress();
+
+    if (currentCardIndex >= reviseDeck.length) {
+        // All words complete!
+        showCompletionScreen();
+        clearReviseProgress(); // Clear progress so next time starts fresh
+    } else {
+        showCurrentWord();
+    }
+}
+
+/**
+ * Restarts the revision with a new shuffle
+ */
+function restartRevision() {
+    initializeNewDeck();
+    hideCompletionScreen();
+    showCurrentWord();
+    console.log('Revision restarted with new shuffle');
 }
 
 /**
@@ -254,26 +435,18 @@ function setupRevisePage() {
             reviseTile.style.transform = 'translateY(-150vh) rotate(20deg)';
             reviseTile.style.opacity = '0';
 
-            // After animation, swap cards and reset
+            // After animation, advance to next card
             setTimeout(() => {
-                // Move next card content to current card
-                if (reviseTileNext) {
-                    reviseTile.textContent = reviseTileNext.textContent;
-                    reviseTile.dataset.audioUrl = reviseTileNext.dataset.audioUrl;
-
-                    // Load new word for next card
-                    const nextWord = getRandomWord();
-                    reviseTileNext.textContent = nextWord.english;
-                    reviseTileNext.dataset.audioUrl = nextWord.audioUrl;
-                }
-
-                // Reset current card position
+                // Reset current card position first
                 reviseTile.style.transition = 'none';
                 reviseTile.style.transform = '';
                 reviseTile.style.opacity = '';
                 reviseTile.classList.remove('swiping');
 
-                console.log('Card swiped - new word loaded');
+                // Advance to the next card in the deck
+                advanceToNextCard();
+
+                console.log('Card swiped - advanced to next word');
             }, 300);
         } else {
             // Didn't pass threshold - snap back
@@ -300,6 +473,14 @@ function setupRevisePage() {
             }
         }
     });
+
+    // Set up "Revise again?" button
+    const reviseAgainBtn = document.getElementById('revise-again-btn');
+    if (reviseAgainBtn) {
+        reviseAgainBtn.addEventListener('click', () => {
+            restartRevision();
+        });
+    }
 
     console.log('Revise page set up complete');
 }
