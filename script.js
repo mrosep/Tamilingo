@@ -76,6 +76,7 @@ const wordList = [
   { english: "rose", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/rose_pwwa5k.mp4" },
   { english: "grey", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/grey_lfyrv9.mp4" },
   { english: "toothbrush", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1768732462/toothbrush_c4cd2t.mp4" },
+  { english: "bottle", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043698/bottle_equbz2.mp4" },
 ];
 
 // Revise deck state - for shuffle without replacement
