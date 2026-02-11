@@ -84,6 +84,7 @@ const wordList = [
   { english: "window", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043697/window_dwny6k.mp4" },
   { english: "body", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043697/body_mc2cr3.mp4" },
   { english: "salt", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043699/salt_ifazsv.mp4" },
+  { english: "plate", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043699/plate_r7v4pu.mp4" },
 ];
 
 // Revise deck state - for shuffle without replacement
