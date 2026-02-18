@@ -91,6 +91,7 @@ const wordList = [
   { english: "face", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043694/face_squybx.mp4" },
   { english: "neck", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043696/neck_cxfpkf.mp4" },
   { english: "fork", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043699/fork_fv3kf7.mp4" },
+  { english: "spoon", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043699/spoon_ftj9uz.mp4" },
 ];
 
 // Revise deck state - for shuffle without replacement
