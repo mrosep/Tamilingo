@@ -97,6 +97,7 @@ const wordList = [
   { english: "door", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043697/door_isfa10.mp4" },
   { english: "milk", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043700/milk_gpskyf.mp4" },
   { english: "mouth", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043696/mouth_co84oe.mp4" },
+  { english: "eye", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043696/eye_yqhwv5.mp4" },
 ];
 
 // Revise deck state - for shuffle without replacement
