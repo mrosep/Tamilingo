@@ -100,6 +100,7 @@ const wordList = [
   { english: "eye", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043696/eye_yqhwv5.mp4" },
   { english: "garden", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043697/garden_mbsxpu.mp4" },
   { english: "throat", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043694/throat_ggaq9w.mp4" },
+  { english: "sugar", audioUrl: "https://res.cloudinary.com/dahnaczgw/video/upload/v1770043699/sugar_gwwkru.mp4" },
 ];
 
 // Revise deck state - for shuffle without replacement
